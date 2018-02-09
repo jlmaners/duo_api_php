@@ -1,4 +1,5 @@
 <?php
+
 namespace DuoAPI;
 
 /*
@@ -7,12 +8,12 @@ namespace DuoAPI;
 
 class Admin extends Client
 {
-
     /*
      * Values a user/group's status can be set to. Note that this is what
      * they can be SET to, there are additional values that can be retrieved.
      */
-    private static $SET_STATUS = array("active", "bypass", "disabled");
+    private static $SET_STATUS = ['active', 'bypass', 'disabled'];
+
     private function is_status($status)
     {
         return is_string($status) && in_array($status, self::$SET_STATUS);
@@ -28,14 +29,14 @@ class Admin extends Client
     {
         assert(is_string($username) || is_null($username));
 
-        $method = "GET";
-        $endpoint = "/admin/v1/users";
-        $params = array();
+        $method = 'GET';
+        $endpoint = '/admin/v1/users';
+        $params = [];
 
         if ($username && !$userid) {
-            $params["username"] = $username;
+            $params['username'] = $username;
         } elseif ($username && $userid) {
-            $endpoint .= ("/" . $username);
+            $endpoint .= ('/' . $username);
         }
 
         if ($this->paging) {
@@ -58,23 +59,23 @@ class Admin extends Client
         assert(self::is_status($status) || is_null($status));
         assert(is_string($notes) || is_null($notes));
 
-        $method = "POST";
-        $endpoint = "/admin/v1/users";
-        $params = array(
-            "username" => $username,
-        );
+        $method = 'POST';
+        $endpoint = '/admin/v1/users';
+        $params = [
+            'username' => $username,
+        ];
 
         if ($realname) {
-            $params["realname"] = $realname;
+            $params['realname'] = $realname;
         }
         if ($email) {
-            $params["email"] = $email;
+            $params['email'] = $email;
         }
         if ($status) {
-            $params["status"] = $status;
+            $params['status'] = $status;
         }
         if ($notes) {
-            $params["notes"] = $notes;
+            $params['notes'] = $notes;
         }
 
         return self::jsonApiCall($method, $endpoint, $params);
@@ -97,30 +98,30 @@ class Admin extends Client
         assert(is_string($predelay) || is_null($predelay));
         assert(is_string($postdelay) || is_null($postdelay));
 
-        $method = "POST";
-        $endpoint = "/admin/v1/phones";
-        $params = array();
+        $method = 'POST';
+        $endpoint = '/admin/v1/phones';
+        $params = [];
 
         if ($number) {
-            $params["number"] = $number;
+            $params['number'] = $number;
         }
         if ($name) {
-            $params["name"] = $name;
+            $params['name'] = $name;
         }
         if ($extension) {
-            $params["extension"] = $extension;
+            $params['extension'] = $extension;
         }
         if ($type) {
-            $params["type"] = $type;
+            $params['type'] = $type;
         }
         if ($platform) {
-            $params["platform"] = $platform;
+            $params['platform'] = $platform;
         }
         if ($predelay) {
-            $params["predelay"] = $predelay;
+            $params['predelay'] = $predelay;
         }
         if ($postdelay) {
-            $params["postdelay"] = $postdelay;
+            $params['postdelay'] = $postdelay;
         }
 
         return self::jsonApiCall($method, $endpoint, $params);
@@ -131,11 +132,11 @@ class Admin extends Client
         assert(is_string($userid));
         assert(is_string($phoneid));
 
-        $method = "POST";
-        $endpoint = "/admin/v1/users/" . $userid . "/phones";
-        $params = array(
-            "phone_id" => $phoneid,
-        );
+        $method = 'POST';
+        $endpoint = '/admin/v1/users/' . $userid . '/phones';
+        $params = [
+            'phone_id' => $phoneid,
+        ];
 
         return self::jsonApiCall($method, $endpoint, $params);
     }
@@ -145,11 +146,11 @@ class Admin extends Client
         assert(is_string($userid));
         assert(is_string($tokenid));
 
-        $method = "POST";
-        $endpoint = "/admin/v1/users/" . $userid . "/tokens";
-        $params = array(
-            "token_id" => $tokenid,
-        );
+        $method = 'POST';
+        $endpoint = '/admin/v1/users/' . $userid . '/tokens';
+        $params = [
+            'token_id' => $tokenid,
+        ];
 
         return self::jsonApiCall($method, $endpoint, $params);
     }
@@ -159,23 +160,23 @@ class Admin extends Client
         assert(is_string($userid));
         assert(is_string($groupid));
 
-        $method = "POST";
-        $endpoint = "/admin/v1/users/" . $userid . "/groups";
-        $params = array(
-            "group_id" => $groupid,
-        );
+        $method = 'POST';
+        $endpoint = '/admin/v1/users/' . $userid . '/groups';
+        $params = [
+            'group_id' => $groupid,
+        ];
 
         return self::jsonApiCall($method, $endpoint, $params);
     }
 
     public function groups($groupid = null)
     {
-        $method = "GET";
-        $endpoint = "/admin/v1/groups";
-        $params = array();
+        $method = 'GET';
+        $endpoint = '/admin/v1/groups';
+        $params = [];
 
         if ($groupid) {
-            $endpoint .= ("/" . $groupid);
+            $endpoint .= ('/' . $groupid);
         }
 
         if ($this->paging) {
@@ -187,12 +188,12 @@ class Admin extends Client
 
     public function integrations($ikey = null)
     {
-        $method = "GET";
-        $endpoint = "/admin/v1/integrations";
-        $params = array();
+        $method = 'GET';
+        $endpoint = '/admin/v1/integrations';
+        $params = [];
 
         if ($ikey) {
-            $endpoint .= ("/" . $ikey);
+            $endpoint .= ('/' . $ikey);
         }
 
         if ($this->paging) {
@@ -204,10 +205,27 @@ class Admin extends Client
 
     public function summary()
     {
+        $method = 'GET';
+        $endpoint = '/admin/v1/info/summary';
+        $params = [];
 
-        $method = "GET";
-        $endpoint = "/admin/v1/info/summary";
-        $params = array();
+        return self::jsonApiCall($method, $endpoint, $params);
+    }
+
+    public function user_create_bypass($userid, $count = 10, $valid_secs = 0, $reuse_count = 1)
+    {
+        assert(is_string($userid));
+        assert(is_int($count));
+        assert(is_int($valid_secs));
+        assert(is_int($reuse_count));
+
+        $method = 'POST';
+        $endpoint = '/admin/v1/users/' . $userid . '/bypass_codes';
+        $params = [
+            'count' => $count,
+            'valid_secs' => $valid_secs,
+            'reuse_count' => $reuse_count
+        ];
 
         return self::jsonApiCall($method, $endpoint, $params);
     }
